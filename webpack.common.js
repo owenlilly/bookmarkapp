@@ -4,7 +4,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const config = {
   context: path.resolve(__dirname, 'public/src'),
   entry: {
-    home: './pages/home/index.js'
+    home: './pages/home/index.js',
+    login: './pages/login/index.js'
   },
   output: {
     path: path.resolve(__dirname, 'public', 'js'),

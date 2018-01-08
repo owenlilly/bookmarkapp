@@ -7,6 +7,9 @@ import bodyParser from 'body-parser';
 import expressJwt from 'express-jwt';
 import cookieParser from 'cookie-parser';
 import AccountController from './api/AccountController';
+import UserRepository from './repositories/UserRepository';
+import UserService from './services/UserService';
+import BookmarkApiController from './api/BookmarkApiController';
 
 mongoose.connect(process.env.MONGO_URI, { useMongoClient: true });
 mongoose.Promise = global.Promise;
@@ -15,6 +18,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3500;
 const SECRET = process.env.SECRET;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const staticPath = path.join(__dirname, '..', 'public');
 
 const authErrorHandler = (err, req, res, next) => {
@@ -66,11 +71,31 @@ app.set('view engine', 'pug');
 app.set('views', './server/views');
 
 app.get('/', (req, res) => {
+  if(!req.user){
+    res.redirect('/login');
+    return;
+  }
+
   res.render('home/index', { pageTitle: 'Home' });
 });
 
-// init controllers
+app.get('/login', (req, res) => {
+  if(req.user){
+    res.redirect('/');
+    return;
+  }
+
+  res.render('home/login', { pageTitle: 'Login' });
+});
+
+
+// api controllers
 AccountController(app, SECRET);
+BookmarkApiController(app);
+
+new UserService().register({email: ADMIN_EMAIL, password: ADMIN_PASSWORD}).subscribe(u => {
+  console.log('default user registered!');
+}, err => {});
 
 // catch all API handler
 app.all('/api/*', (req, res) => {

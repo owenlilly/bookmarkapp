@@ -11,6 +11,11 @@ export default class RxHttpClient {
     return Rx.Observable.fromPromise(axios.get(url, config));
   }
 
+  delete(path, config){
+    const url = this.makeUrl(path);
+    return Rx.Observable.fromPromise(axios.delete(url, config));
+  }
+
   post(path, data, config){
     const url = this.makeUrl(path);
     return Rx.Observable.fromPromise(axios.post(url, data, config));
