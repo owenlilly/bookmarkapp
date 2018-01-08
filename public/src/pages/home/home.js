@@ -67,21 +67,53 @@ export default class Home extends Component {
     const { bookmarks, title, link, description } = this.state;
     return (
       <div>
-        <a onClick={this.logout} href="#">logout</a>
-        <form>
-          <input type="text" placeholder="Title" onChange={this.onChange} name="title" value={title} />
-          <input type="text" placeholder="Link" onChange={this.onChange} name="link" value={link} />
-          <input type="text" placeholder="Description" onChange={this.onChange} name="description" value={description} />
-          <button onClick={this.saveBookmark}>Save</button>
-        </form>
-        <h1>Boobmarks</h1>
-        <ul>
-          {
-            bookmarks.map((b, i) => (
-              <li key={i}>{b.title}: {b.link} <span style={{display: 'inline-block'}} onClick={() => this.deleteBookmark(b._id)}>X</span></li>
-            ))
-          }
-        </ul>
+        <div className="row">
+          <a onClick={this.logout} href="#">logout</a>
+        </div>
+        <div className="row">
+          <div className="col-md-8">
+            <h2>Bookmarks</h2>
+            <table className="table table-sm table-hover">
+              <thead className="thead-light">
+                <tr>
+                  <th>Title</th>
+                  <th>Link</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  bookmarks.map((b, i) => (
+                    <tr key={i}>
+                      <td>{b.title}</td>
+                      <td><a href={b.link}>{b.link}</a></td> 
+                      <td>{b.description}</td>
+                      <td style={{color: '#aa0000'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="oi oi-trash" onClick={() => this.deleteBookmark(b._id)}></span></td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+          <div className="col-md-4">
+            <h2>New Bookmark</h2>
+            <form>
+              <div className="form-group">
+                <input className="form-control" type="text" placeholder="Title" onChange={this.onChange} name="title" value={title} />
+              </div>
+              <div className="form-group">
+                <input className="form-control" type="text" placeholder="Link" onChange={this.onChange} name="link" value={link} />
+              </div>
+              <div className="form-group">
+                <input className="form-control" type="text" placeholder="Description" onChange={this.onChange} name="description" value={description} />
+              </div>
+              <div className="form-group">
+                <button className="btn btn-success btn-block" onClick={this.saveBookmark}>Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     );
   }
